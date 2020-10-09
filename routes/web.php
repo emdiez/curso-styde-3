@@ -14,10 +14,12 @@ Route::get('/usuarios/{id}', function ($id) {
 });
 
 Route::get('/usuarios/nuevo', function () {
-    return "Crar nuevo usuario";
+    return "Crear nuevo usuario";
 });
 
 Route::get('/usuario/{name}/{nickname?}', function ($name, $nickname = null) {
+    $name = ucfirst($name);
+
     if ($nickname) {
         return "Hola {$name}, tu apodo es {$nickname}";
     }
