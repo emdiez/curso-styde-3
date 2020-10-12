@@ -18,6 +18,10 @@ class User extends Authenticatable
         'name', 'email', 'password', 'profession_id',
     ];
 
+    protected $casts = [
+        'is_admin' => 'boolean'
+    ];
+
     /**
      * The attributes that should be hidden for arrays.
      *
