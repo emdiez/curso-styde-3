@@ -1,5 +1,7 @@
 <?php
 
+use App\Profession;
+use App\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -18,15 +20,26 @@ class UserSeeder extends Seeder
         // $profession = DB::table('professions')->select('id')->where('title', 'Desarrollador Back-end')->take(1)->get();
         // $profession = DB::table('professions')->select('id')->where('title', 'Desarrollador Back-end')->first();
         // $profession = DB::table('professions')->select('id')->whereTitle('Desarrollador Back-end')->first();
-        $professionId = DB::table('professions')->where('title', 'Desarrollador Back-end')->value('id');
 
-        DB::table('users')->insert([
+        // $professionId = DB::table('professions')->where('title', 'Desarrollador Back-end')->value('id');
+
+        // DB::table('users')->insert([
+        //     'name' => 'Salomon Machuca',
+        //     'email' => 'em_di-es@hotmail.com',
+        //     'password' => bcrypt('laravel'),
+        //     'profession_id' => $professionId,
+        //     'created_at' => $now,
+        //     'updated_at' => $now
+        // ]);
+
+        $professionId = Profession::where('title', 'Desarrollador Back-end')->value('id');
+
+        User::create([
             'name' => 'Salomon Machuca',
             'email' => 'em_di-es@hotmail.com',
             'password' => bcrypt('laravel'),
             'profession_id' => $professionId,
-            'created_at' => $now,
-            'updated_at' => $now
         ]);
+
     }
 }
