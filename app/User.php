@@ -2,8 +2,9 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
+use App\Profession;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -33,11 +34,16 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return (strcmp($this->email, 'em_di-es@hotmail.com') === 0);
+        return $this->is_admin;
     }
 
     public static function findByEmail($email)
     {
         return static::where(compact('email'))->first();
+    }
+
+    public function profession()
+    {
+        return $this->belongsTo(Profession::class);
     }
 }
