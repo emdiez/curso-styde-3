@@ -25,7 +25,14 @@ class UserController extends Controller
     public function show($id)
     {
         $title = "Listado de usuarios";
-        $user = User::find($id);
+
+        // $user = User::find($id);
+        // if ($user == null) {
+        //     return response()->view('errors.404', ['title' => $title], 404);
+        // }
+
+        // $user = User::findOrFail($id);
+        // $user = User::where('id', '>=', $id)->firstOrFail();
 
         return view('users.show')
             ->with('title', $title)

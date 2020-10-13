@@ -12,7 +12,7 @@
                 {{-- <a href="{{ action('UserController@show', ['id' => $user->id]) }}"> Ver detalles</a> --}}
                 {{-- <a href="{{ route('users.show', ['id' => $user->id]) }}"> Ver detalles</a> --}}
                 {{-- <a href="{{ route('users.show', ['id' => $user]) }}"> Ver detalles</a> --}}
-                {{-- <a href="{{ route('users.show', [$user]) }}"> Ver detalles</a> --}}
+                <a href="{{ route('users.show', [$user]) }}"> Ver detalles</a>
             </li>
         @empty
              <p>No hay usuarios registrados.</p>

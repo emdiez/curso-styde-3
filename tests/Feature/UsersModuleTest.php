@@ -45,7 +45,6 @@ class UsersModuleTest extends TestCase
             ->assertSee('No hay usuarios registrados.');
     }
 
-
     /** @test */
     function it_loads_the_users_details_page()
     {
@@ -58,6 +57,16 @@ class UsersModuleTest extends TestCase
         $this->get('usuarios/' . $user->id)
             ->assertStatus(200)
             ->assertSee('Salo');
+    }
+
+    /** @test */
+    function it_loads_page_404_if_the_users_not_found()
+    {
+        // $this->withoutExceptionHandling();
+
+        $this->get('usuarios/9999999')
+            ->assertStatus(404)
+            ->assertSee('Pagina no encontrada.');
     }
 
     /** @test */
