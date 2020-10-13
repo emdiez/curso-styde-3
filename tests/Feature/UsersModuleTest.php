@@ -49,9 +49,15 @@ class UsersModuleTest extends TestCase
     /** @test */
     function it_loads_the_users_details_page()
     {
-        $this->get('usuarios/6')
+        factory(Profession::class)->create();
+
+        $user = factory(User::class)->create([
+            'name' => 'Salo'
+        ]);
+
+        $this->get('usuarios/' . $user->id)
             ->assertStatus(200)
-            ->assertSee('Detalle de usuario 6');
+            ->assertSee('Salo');
     }
 
     /** @test */

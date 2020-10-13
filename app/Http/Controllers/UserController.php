@@ -25,10 +25,11 @@ class UserController extends Controller
     public function show($id)
     {
         $title = "Listado de usuarios";
+        $user = User::find($id);
 
         return view('users.show')
             ->with('title', $title)
-            ->with('id', $id);
+            ->with('user', $user);
     }
 
     public function create()

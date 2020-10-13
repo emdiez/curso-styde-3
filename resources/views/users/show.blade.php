@@ -3,7 +3,10 @@
 @section('title', $title)
 
 @section('content')
-    <h1>{{ "Detalle de usuario {$id}" }}</h1>
+    <h1>{{ "Detalle de usuario {$user->id}" }}</h1>
+
+    <p>Nombre: {{ $user->name }}</p>
+    <p>Correo: {{ $user->email }}</p>
 
 @endsection
 
