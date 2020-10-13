@@ -5,12 +5,12 @@ Route::get('/', function(){
 });
 
 Route::get('/usuarios', 'UserController@index')->name('users');
-Route::get('/usuarios/{id}', 'UserController@show')
-    ->where('id', '\d+')
+Route::get('/usuarios/{user}', 'UserController@show')
+    ->where('user', '\d+')
     ->name('users.show');
 Route::get('/usuarios/nuevo', 'UserController@create')->name('users.create');
-Route::get('/usuarios/{id}/edit', 'UserController@edit')
-    ->where(['id' => '\d+'])
+Route::get('/usuarios/{user}/edit', 'UserController@edit')
+    ->where(['user' => '\d+'])
     ->name('users.edit');
 
 Route::get('/usuario/{name}/{nickname}', 'WelcomeUserController@withNickname');

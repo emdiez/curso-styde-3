@@ -22,7 +22,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function show($id)
+    public function show(User $user)
     {
         $title = "Listado de usuarios";
 
@@ -44,8 +44,13 @@ class UserController extends Controller
         return 'Crear nuevo usuario';
     }
 
-    public function edit($id)
+    public function edit(User $user)
     {
-        return "Editar usuario {$id}";
+        $title = 'Editar usuarios';
+
+        return view('users.edit', [
+            'user' => $user,
+            'title' => $title,
+        ]);
     }
 }

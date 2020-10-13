@@ -80,10 +80,14 @@ class UsersModuleTest extends TestCase
      /** @test */
     function it_loads_the_users_edit_page()
     {
-        $this->withoutExceptionHandling();
+        factory(Profession::class)->create();
 
-        $this->get('usuarios/4/edit')
+        $user = factory(User::class)->create([
+            'name' => 'Salo'
+        ]);
+
+        $this->get("usuarios/{$user->id}/edit")
             ->assertStatus(200)
-            ->assertSee('Editar usuario 4');
+            ->assertSee("Editar usuario {$user->id}");
     }
 }
