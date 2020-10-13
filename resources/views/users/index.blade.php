@@ -6,14 +6,11 @@
     <h1>{{ $title }}</h1>
     <ul>
 
-        @if(! empty($users))
-            @foreach($users as $user)
-                <li>{{ $user->name }}, ({{ $user->email }})</li>
-            @endforeach
-        @else
-            <p>No hay usuarios registrados.</p>
-        @endif
-
+        @forelse ($users as $user)
+            <li>{{ $user->name }}, ({{ $user->email }})</li>
+        @empty
+             <p>No hay usuarios registrados.</p>
+        @endforelse
     </ul>
 @endsection
 

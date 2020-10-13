@@ -1,7 +1,7 @@
 <?php
 
-Route::get('/', function () {
-    return 'Home';
+Route::get('/', function(){
+    return view('welcome');
 });
 
 Route::get('/usuarios', 'UserController@index');
