@@ -8,7 +8,7 @@
 
         @if(! empty($users))
             @foreach($users as $user)
-                <li>{{ $user }}</li>
+                <li>{{ $user->name }}, ({{ $user->email }})</li>
             @endforeach
         @else
             <p>No hay usuarios registrados.</p>
@@ -18,6 +18,6 @@
 @endsection
 
 @section('sidebar')
-    @parent
+    {{-- @parent --}}
     <h2>Barra lateral personalizada</h2>
 @endsection
