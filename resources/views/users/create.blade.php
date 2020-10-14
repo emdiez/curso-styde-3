@@ -4,15 +4,37 @@
 
 @section('content')
     <h1>{{ $title }}</h1>
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <h6>Por favor corrige los siguientes errores:</h6>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <h4>Por favor corrige los siguientes errores:</h4>
+            <ul>
+                @foreach ($errors->get('name') as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('users.store') }}">
         {!! csrf_field() !!}
 
         <label for="name">Nombre:</label>
-        <input type="text" name="name" id="name" placeholder="Pedro Perez">
-        <br>
+        <input type="text" name="name" id="name" placeholder="Pedro Perez" value="{{ old('name') }}">
+        @if ($errors->has('name'))
+            <p>{{ $errors->first('name') }}</p>
+        @else
+            <br>
+        @endif
 
         <label for="email">Email:</label>
-        <input type="email" name="email" id="email" placeholder="email@email.com">
+        <input type="email" name="email" id="email" placeholder="email@email.com" value="{{ old('email') }}">
         <br>
 
         <label for="password">Contrasenia:</label>
