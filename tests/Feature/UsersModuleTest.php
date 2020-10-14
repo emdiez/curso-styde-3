@@ -13,7 +13,7 @@ class UsersModuleTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    function it_loads_the_users_list_page()
+    public function it_loads_the_users_list_page()
     {
         // $this->withoutExceptionHandling();
 
@@ -35,7 +35,7 @@ class UsersModuleTest extends TestCase
     }
 
     /** @test */
-    function it_loads_the_users_list_page_without_data()
+    public function it_loads_the_users_list_page_without_data()
     {
         $this->withoutExceptionHandling();
         // dd(User::count());
@@ -46,7 +46,7 @@ class UsersModuleTest extends TestCase
     }
 
     /** @test */
-    function it_loads_the_users_details_page()
+    public function it_loads_the_users_details_page()
     {
         factory(Profession::class)->create();
 
@@ -60,7 +60,7 @@ class UsersModuleTest extends TestCase
     }
 
     /** @test */
-    function it_loads_page_404_if_the_users_not_found()
+    public function it_loads_page_404_if_the_users_not_found()
     {
         // $this->withoutExceptionHandling();
 
@@ -70,15 +70,15 @@ class UsersModuleTest extends TestCase
     }
 
     /** @test */
-    function it_loads_the_users_create_page()
+    public function it_loads_the_users_create_page()
     {
         $this->get('usuarios/nuevo')
             ->assertStatus(200)
             ->assertSee('Registrar nuevo usuario');
     }
 
-     /** @test */
-    function it_loads_the_users_edit_page()
+    /** @test */
+    public function it_loads_the_users_edit_page()
     {
         factory(Profession::class)->create();
 
@@ -92,7 +92,7 @@ class UsersModuleTest extends TestCase
     }
 
     /** @test */
-    function it_creates_a_new_user()
+    public function it_creates_a_new_user()
     {
         $profession = factory(Profession::class)->create();
         $this->withoutExceptionHandling();
@@ -114,6 +114,32 @@ class UsersModuleTest extends TestCase
             'name' => 'Salomon',
             'email' => 'email@email.com',
             'password' => '123456'
+        ]);
+    }
+
+    /** @test */
+    public function the_name_is_required_to_creates_a_new_user()
+    {
+        // $this->withoutExceptionHandling();
+
+        $profession = factory(Profession::class)->create();
+
+        $this->from('/usuarios/nuevo')
+            ->post('/usuarios', [
+                'name' => '',
+                'email' => 'email@email.com',
+                'password' => '123456',
+                'profession_id' => $profession->id,
+            ])
+            ->assertRedirect(route('users.create'))
+            ->assertSessionHasErrors([
+                'name' => 'El campo nombres es obligatorio'
+            ]);
+
+        $this->assertEquals(0, User::count());
+
+        $this->assertDatabaseMissing('users', [
+            'email' => 'email@email.com',
         ]);
     }
 }

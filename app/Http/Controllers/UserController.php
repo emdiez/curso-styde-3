@@ -50,7 +50,21 @@ class UserController extends Controller
     public function store()
     {
         // $data = request()->all();
-        $data = request()->only(['name', 'email', 'password', 'profession_id']);
+        // $data = request()->only(['name', 'email', 'password', 'profession_id']);
+
+        // if ($data['name'] == null) {
+        //     return redirect()->route('users.create')
+        //         ->withErrors(['name' => 'El campo nombres es obligatorio']);
+        // }
+
+        $data = request()->validate([
+            'name' => ['required'],
+            // 'email' => '',
+            // 'password' => '',
+            // 'profession_id' => '',
+        ], [
+            'name.required' => 'El campo nombres es obligatorio'
+        ]);
 
         User::create([
             'name' => $data['name'],
