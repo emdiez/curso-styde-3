@@ -19,4 +19,13 @@ class WelcomeUserController extends Controller
 
         return "Hola {$name}";
     }
+
+    public function age($age = null)
+    {
+        if ($age) {
+            return "Hola tu edad es {$age}";
+        }
+
+        return "Hola no colocaste tu edad";
+    }
 }
