@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Profession;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,12 +42,15 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('users.create')->with('title', 'Registrar nuevo usuario');
+        return view('users.create')
+            ->with('title', 'Registrar nuevo usuario')
+            ->with('professions', Profession::all());
     }
 
     public function store()
     {
-        $data = request()->all();
+        // $data = request()->all();
+        $data = request()->only(['name', 'email', 'password', 'profession_id']);
 
         User::create([
             'name' => $data['name'],
