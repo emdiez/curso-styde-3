@@ -90,4 +90,30 @@ class UsersModuleTest extends TestCase
             ->assertStatus(200)
             ->assertSee("Editar usuario {$user->id}");
     }
+
+    /** @test */
+    function it_creates_a_new_user()
+    {
+        $profession = factory(Profession::class)->create();
+        $this->withoutExceptionHandling();
+
+        $this->post('/usuarios', [
+            'name' => 'Salomon',
+            'email' => 'email@email.com',
+            'password' => '123456',
+            'profession_id' => $profession->id,
+        ])->assertRedirect(route('users'));
+
+        $this->assertDatabaseHas('users', [
+            'name' => 'Salomon',
+            'email' => 'email@email.com',
+            'profession_id' => $profession->id,
+        ]);
+
+        $this->assertCredentials([
+            'name' => 'Salomon',
+            'email' => 'email@email.com',
+            'password' => '123456'
+        ]);
+    }
 }

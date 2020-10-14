@@ -46,7 +46,16 @@ class UserController extends Controller
 
     public function store()
     {
-        return 'Procesando solicitud';
+        $data = request()->all();
+
+        User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+            'profession_id' => $data['profession_id'],
+        ]);
+
+        return redirect()->route('users');
     }
 
     public function edit(User $user)

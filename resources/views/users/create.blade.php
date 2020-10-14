@@ -5,8 +5,7 @@
 @section('content')
     <h1>{{ $title }}</h1>
     <form method="POST" action="{{ route('users.store') }}">
-        {{-- {!! csrf_field() !!} --}}
-        @csrf
+        {!! csrf_field() !!}
 
         <button type="submit">Registrar</button>
     </form>
