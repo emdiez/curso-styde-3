@@ -196,6 +196,30 @@ class UsersModuleTest extends TestCase
         ]);
     }
 
+    public function the_profession_id_is_required_to_creates_a_new_user()
+    {
+        // $this->withoutExceptionHandling();
+        $profession = factory(Profession::class)->create();
+
+        $this->from('/usuarios/nuevo')
+            ->post('/usuarios', [
+                'name' => 'Salo',
+                'email' => 'email@email.com',
+                'password' => '',
+                'profession_id' => '',
+            ])
+            ->assertRedirect(route('users.create'))
+            ->assertSessionHasErrors([
+                'profession_id' => 'El campo profession es obligatorio'
+            ]);
+
+        $this->assertEquals(0, User::count());
+
+        $this->assertDatabaseMissing('users', [
+            'email' => 'email@email.com',
+        ]);
+    }
+
     /** @test */
     public function the_password_should_be_min_6_chars_to_creates_a_new_user()
     {
@@ -327,4 +351,173 @@ class UsersModuleTest extends TestCase
     }
 
 
+    /** @test */
+    public function the_name_is_required_to_update_the_user()
+    {
+        $profession = factory(Profession::class)->create();
+        $user = factory(User::class)->create(['name' => 'Salo']);
+
+        $this->from("/usuarios/{$user->id}/edit")
+            ->put("/usuarios/{$user->id}", [
+                'name' => '',
+                'email' => 'email@email.com',
+                'password' => '123456',
+                'profession_id' => $profession->id,
+            ])
+            ->assertRedirect(route('users.edit', ['user' => $user]))
+            ->assertSessionHasErrors(['name']);
+
+        $this->assertDatabaseHas('users', [
+            'name' => 'Salo',
+        ]);
+    }
+
+    /** @test */
+    public function the_email_is_required_to_update_the_user()
+    {
+        $profession = factory(Profession::class)->create();
+        $user = factory(User::class)->create(['email' => 'email@email.com']);
+
+        $this->from("/usuarios/{$user->id}/edit")
+            ->put("/usuarios/{$user->id}", [
+                'name' => 'Salo',
+                'email' => '',
+                'password' => '123456',
+                'profession_id' => $profession->id,
+            ])
+            ->assertRedirect(route('users.edit', ['user' => $user]))
+            ->assertSessionHasErrors(['email']);
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'email@email.com',
+        ]);
+    }
+
+    /** @test */
+    public function the_email_must_be_unique_to_update_the_user()
+    {
+        static::markTestIncomplete();
+        return;
+
+        $profession = factory(Profession::class)->create();
+        $user = factory(User::class)->create(['email' => 'email@email.com']);
+
+        $this->from("/usuarios/{$user->id}/edit")
+            ->put("/usuarios/{$user->id}", [
+                'name' => 'Salo',
+                'email' => 'email@email.com',
+                'password' => '123456',
+                'profession_id' => $profession->id,
+            ])
+            ->assertRedirect(route('users.edit', ['user' => $user]))
+            ->assertSessionHasErrors(['email']);
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'email@email.com',
+        ]);
+    }
+
+    /** @test */
+    public function the_email_must_be_valid_to_update_the_user()
+    {
+        $profession = factory(Profession::class)->create();
+        $user = factory(User::class)->create(['email' => 'email@email.com']);
+
+        $this->from("/usuarios/{$user->id}/edit")
+            ->put("/usuarios/{$user->id}", [
+                'name' => 'Salo',
+                'email' => 'email',
+                'password' => '123456',
+                'profession_id' => $profession->id,
+            ])
+            ->assertRedirect(route('users.edit', ['user' => $user]))
+            ->assertSessionHasErrors(['email']);
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'email@email.com',
+        ]);
+    }
+
+    /** @test */
+    public function the_password_is_required_to_update_the_user()
+    {
+        $profession = factory(Profession::class)->create();
+        $user = factory(User::class)->create(['email' => 'email@email.com']);
+
+        $this->from("/usuarios/{$user->id}/edit")
+            ->put("/usuarios/{$user->id}", [
+                'name' => 'Salo',
+                'email' => 'emailmodificado@email.com',
+                'password' => '',
+                'profession_id' => $profession->id,
+            ])
+            ->assertRedirect(route('users.edit', ['user' => $user]))
+            ->assertSessionHasErrors(['password']);
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'email@email.com',
+        ]);
+    }
+
+    /** @test */
+    public function the_password_should_be_min_6_chars_to_update_the_user()
+    {
+        $profession = factory(Profession::class)->create();
+        $user = factory(User::class)->create(['email' => 'email@email.com']);
+
+        $this->from("/usuarios/{$user->id}/edit")
+            ->put("/usuarios/{$user->id}", [
+                'name' => 'Salo',
+                'email' => 'emailmodificado@email.com',
+                'password' => '123',
+                'profession_id' => $profession->id,
+            ])
+            ->assertRedirect(route('users.edit', ['user' => $user]))
+            ->assertSessionHasErrors(['password']);
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'email@email.com',
+        ]);
+    }
+
+    public function the_profession_id_is_required_to_update_the_user()
+    {
+        $profession = factory(Profession::class)->create();
+        $user = factory(User::class)->create(['email' => 'email@email.com']);
+
+        $this->from("/usuarios/{$user->id}/edit")
+            ->put("/usuarios/{$user->id}", [
+                'name' => 'Salo',
+                'email' => 'emailmodificado@email.com',
+                'password' => '',
+                'profession_id' => '',
+            ])
+            ->assertRedirect(route('users.edit', ['user' => $user]))
+            ->assertSessionHasErrors(['profession_id']);
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'email@email.com',
+        ]);
+    }
+
+    /** @test */
+    public function the_profession_id_must_be_exists_to_update_the_user()
+    {
+        $profession = factory(Profession::class)->create();
+        $user = factory(User::class)->create(['email' => 'email@email.com']);
+
+        $this->from("/usuarios/{$user->id}/edit")
+            ->put("/usuarios/{$user->id}", [
+                'name' => 'Salo',
+                'email' => 'emailmodificado@email.com',
+                'password' => '123',
+                'profession_id' => 1000,
+            ])
+            ->assertRedirect(route('users.edit', ['user' => $user]))
+            ->assertSessionHasErrors(['password']);
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'email@email.com',
+        ]);
+    }
 }

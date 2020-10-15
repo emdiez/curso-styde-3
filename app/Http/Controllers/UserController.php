@@ -69,6 +69,7 @@ class UserController extends Controller
             'email.unique' => 'El campo email debe ser unico',
             'password.required' => 'El campo password es obligatorio',
             'password.min' => 'El campo password debe contener minimo 6 caracteres',
+            'profession_id.required' => 'El campo profession es obligatorio',
             'profession_id.exists' => 'Debe seleccionar una profesion existente'
         ]);
 
@@ -93,7 +94,12 @@ class UserController extends Controller
 
     public function update(User $user)
     {
-        $data = request()->all();
+        $data = request()->validate([
+            'name' => ['required'],
+            'email' => ['required', 'email'],
+            'password' => ['required', 'min:6'],
+            'profession_id' => 'required', 'exists:professions,id',
+        ]);
         $data['password'] = bcrypt($data['password']);
 
         $user->update($data);

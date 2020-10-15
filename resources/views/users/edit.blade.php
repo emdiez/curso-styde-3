@@ -16,7 +16,8 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('users.store') }}">
+    <form method="POST" action="{{ route('users.update', ['user' => $user]) }}">
+        {!! method_field('PUT') !!}
         {!! csrf_field() !!}
 
         <label for="name">Nombre:</label>
@@ -41,7 +42,7 @@
 
             <br>
 
-            <button type="submit">Registrar</button>
+            <button type="submit">Actualizar usuario</button>
         @endif
     </form>
 
