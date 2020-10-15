@@ -84,11 +84,10 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        $title = 'Editar usuarios';
-
         return view('users.edit', [
             'user' => $user,
-            'title' => $title,
+            'title' => "Editar usuario {$user->id}",
+            'professions' => Profession::all(),
         ]);
     }
 }

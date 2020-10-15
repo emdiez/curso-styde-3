@@ -88,7 +88,11 @@ class UsersModuleTest extends TestCase
 
         $this->get("usuarios/{$user->id}/edit")
             ->assertStatus(200)
-            ->assertSee("Editar usuario {$user->id}");
+            ->assertSee("Editar usuario {$user->id}")
+            ->assertViewIs('users.edit')
+            ->assertViewHas('user', function ($viewUser) use ($user) {
+                return $viewUser->id === $user->id;
+            });
     }
 
     /** @test */
