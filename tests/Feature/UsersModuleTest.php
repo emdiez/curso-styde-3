@@ -142,4 +142,108 @@ class UsersModuleTest extends TestCase
             'email' => 'email@email.com',
         ]);
     }
+
+    /** @test */
+    public function the_email_is_required_to_creates_a_new_user()
+    {
+        $profession = factory(Profession::class)->create();
+
+        $this->from('/usuarios/nuevo')
+            ->post('/usuarios', [
+                'name' => 'Salo',
+                'email' => '',
+                'password' => '123456',
+                'profession_id' => $profession->id,
+            ])
+            ->assertRedirect(route('users.create'))
+            ->assertSessionHasErrors([
+                'email' => 'El campo email es obligatorio'
+            ]);
+
+        $this->assertEquals(0, User::count());
+
+        $this->assertDatabaseMissing('users', [
+            'name' => 'Salo',
+        ]);
+    }
+
+    /** @test */
+    public function the_password_is_required_to_creates_a_new_user()
+    {
+        // $this->withoutExceptionHandling();
+        $profession = factory(Profession::class)->create();
+
+        $this->from('/usuarios/nuevo')
+            ->post('/usuarios', [
+                'name' => 'Salo',
+                'email' => 'email@email.com',
+                'password' => '',
+                'profession_id' => $profession->id,
+            ])
+            ->assertRedirect(route('users.create'))
+            ->assertSessionHasErrors([
+                'password' => 'El campo password es obligatorio'
+            ]);
+
+        $this->assertEquals(0, User::count());
+
+        $this->assertDatabaseMissing('users', [
+            'email' => 'email@email.com',
+        ]);
+    }
+
+    /** @test */
+    public function the_email_must_be_valide_to_creates_a_new_user()
+    {
+        $profession = factory(Profession::class)->create();
+
+        $this->from('/usuarios/nuevo')
+            ->post('/usuarios', [
+                'name' => 'Salo',
+                'email' => 'email',
+                'password' => '123456',
+                'profession_id' => $profession->id,
+            ])
+            ->assertRedirect(route('users.create'))
+            ->assertSessionHasErrors([
+                'email' => 'El campo email debe ser valido'
+            ]);
+
+        $this->assertEquals(0, User::count());
+
+        $this->assertDatabaseMissing('users', [
+            'email' => 'email@email.com',
+        ]);
+    }
+
+    /** @test */
+    public function the_email_must_be_unique_to_creates_a_new_user()
+    {
+        $profession = factory(Profession::class)->create();
+
+        factory(User::class)->create([
+            'email' => 'email@email.com',
+            'profession_id' => $profession->id,
+        ]);
+
+        $this->from('/usuarios/nuevo')
+            ->post('/usuarios', [
+                'name' => 'Salo',
+                'email' => 'email@email.com',
+                'password' => '123456',
+                'profession_id' => $profession->id,
+            ])
+            ->assertRedirect(route('users.create'))
+            ->assertSessionHasErrors([
+                'email' => 'El campo email debe ser unico'
+            ]);
+
+        $this->assertEquals(1, User::count());
+
+        // $this->assertDatabaseMissing('users', [
+        //     'email' => 'email@email.com',
+        // ]);
+    }
+
+
 }

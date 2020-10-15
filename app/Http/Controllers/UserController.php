@@ -59,11 +59,15 @@ class UserController extends Controller
 
         $data = request()->validate([
             'name' => ['required'],
-            // 'email' => '',
-            // 'password' => '',
+            'email' => ['required', 'email', 'unique:users,email'],
+            'password' => ['required'],
             // 'profession_id' => '',
         ], [
-            'name.required' => 'El campo nombres es obligatorio'
+            'name.required' => 'El campo nombres es obligatorio',
+            'email.required' => 'El campo email es obligatorio',
+            'email.email' => 'El campo email debe ser valido',
+            'email.unique' => 'El campo email debe ser unico',
+            'password.required' => 'El campo password es obligatorio'
         ]);
 
         User::create([
