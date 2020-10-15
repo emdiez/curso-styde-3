@@ -13,6 +13,9 @@ Route::post('/usuarios', 'UserController@store')->name('users.store');
 Route::get('/usuarios/{user}/edit', 'UserController@edit')
     ->where(['user' => '\d+'])
     ->name('users.edit');
+Route::put('/usuarios/{user}', 'UserController@update')
+    ->where(['user' => '\d+'])
+    ->name('users.update');
 
 
 Route::get('/usuario/{name}/{nickname}', 'WelcomeUserController@withNickname');

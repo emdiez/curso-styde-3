@@ -298,4 +298,33 @@ class UsersModuleTest extends TestCase
     }
 
 
+    /** @test */
+    public function it_update_the_user()
+    {
+        $this->withoutExceptionHandling();
+
+        $profession = factory(Profession::class)->create();
+        $user = factory(User::class)->create();
+
+        $this->put("/usuarios/{$user->id}", [
+            'name' => 'Salomon',
+            'email' => 'email@email.com',
+            'password' => '123456',
+            'profession_id' => $profession->id,
+        ])->assertRedirect(route('users.show', ['user' => $user]));
+
+        $this->assertDatabaseHas('users', [
+            'name' => 'Salomon',
+            'email' => 'email@email.com',
+            'profession_id' => $profession->id,
+        ]);
+
+        $this->assertCredentials([
+            'name' => 'Salomon',
+            'email' => 'email@email.com',
+            'password' => '123456'
+        ]);
+    }
+
+
 }

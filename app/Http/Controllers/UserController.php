@@ -90,4 +90,16 @@ class UserController extends Controller
             'professions' => Profession::all(),
         ]);
     }
+
+    public function update(User $user)
+    {
+        $data = request()->all();
+        $data['password'] = bcrypt($data['password']);
+
+        $user->update($data);
+
+        return redirect()->route('users.show', ['user' => $user])
+            ->with('title', "Listado de usuarios")
+            ->with('user', $user);
+    }
 }
