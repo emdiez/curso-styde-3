@@ -193,6 +193,31 @@ class UsersModuleTest extends TestCase
     }
 
     /** @test */
+    public function the_password_should_be_min_6_chars_to_creates_a_new_user()
+    {
+        // $this->withoutExceptionHandling();
+        $profession = factory(Profession::class)->create();
+
+        $this->from('/usuarios/nuevo')
+            ->post('/usuarios', [
+                'name' => 'Salo',
+                'email' => 'email@email.com',
+                'password' => '123',
+                'profession_id' => $profession->id,
+            ])
+            ->assertRedirect(route('users.create'))
+            ->assertSessionHasErrors([
+                'password' => 'El campo password debe contener minimo 6 caracteres'
+            ]);
+
+        $this->assertEquals(0, User::count());
+
+        $this->assertDatabaseMissing('users', [
+            'email' => 'email@email.com',
+        ]);
+    }
+
+    /** @test */
     public function the_email_must_be_valide_to_creates_a_new_user()
     {
         $profession = factory(Profession::class)->create();
@@ -239,10 +264,33 @@ class UsersModuleTest extends TestCase
             ]);
 
         $this->assertEquals(1, User::count());
+    }
 
-        // $this->assertDatabaseMissing('users', [
-        //     'email' => 'email@email.com',
-        // ]);
+
+    /** @test */
+    public function the_profession_should_be_exists_to_creates_a_new_user()
+    {
+        $profession = factory(Profession::class)->create();
+
+        $this->from('/usuarios/nuevo')
+            ->post('/usuarios', [
+                'name' => 'Salo',
+                'email' => 'email@email.com',
+                'password' => '123456',
+                'profession_id' => 1000,
+            ])
+            ->assertRedirect(route('users.create'))
+            ->assertSessionHasErrors([
+                'profession_id' => 'Debe seleccionar una profesion existente'
+            ]);
+
+        $this->assertEquals(0, User::count());
+
+        $this->assertDatabaseMissing('users', [
+            'name' => 'Salo',
+            'email' => 'email@email.com',
+        ]);
+
     }
 
 
