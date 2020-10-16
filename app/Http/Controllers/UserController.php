@@ -97,7 +97,8 @@ class UserController extends Controller
     {
         $data = request()->validate([
             'name' => ['required'],
-            'email' => ['required', 'email'],
+            // 'email' => ['required', 'email', 'unique:users,email,' . $user->id],
+            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($user->id, 'id')],
             'password' => ['nullable', 'min:6'],
             'profession_id' => 'required', 'exists:professions,id',
         ]);

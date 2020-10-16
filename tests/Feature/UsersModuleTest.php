@@ -396,11 +396,15 @@ class UsersModuleTest extends TestCase
     /** @test */
     public function the_email_must_be_unique_to_update_the_user()
     {
-        static::markTestIncomplete();
-        return;
-
         $profession = factory(Profession::class)->create();
-        $user = factory(User::class)->create(['email' => 'email@email.com']);
+        factory(User::class)->create([
+            'name' => 'Nombre',
+            'email' => 'email@email.com'
+        ]);
+        $user = factory(User::class)->create([
+            'name' => 'Nombre 2',
+            'email' => 'email2@email.com'
+        ]);
 
         $this->from("/usuarios/{$user->id}/edit")
             ->put("/usuarios/{$user->id}", [
@@ -412,10 +416,34 @@ class UsersModuleTest extends TestCase
             ->assertRedirect(route('users.edit', ['user' => $user]))
             ->assertSessionHasErrors(['email']);
 
-        $this->assertDatabaseHas('users', [
+        $this->assertDatabaseMissing('users', [
+            'name' => 'Salo',
             'email' => 'email@email.com',
         ]);
     }
+
+    /** @test */
+    public function the_email_can_stay_same_when_update_the_user()
+    {
+        $profession = factory(Profession::class)->create();
+        $user = factory(User::class)->create(['email' => 'email@email.com']);
+
+        $this->from("/usuarios/{$user->id}/edit")
+            ->put("/usuarios/{$user->id}", [
+                'name' => 'Salo',
+                'email' => 'email@email.com',
+                'password' => '123456',
+                'profession_id' => $profession->id,
+            ])
+            ->assertRedirect(route('users.show', ['user' => $user]));
+
+        $this->assertDatabaseHas('users', [
+            'name' => 'Salo',
+            'email' => 'email@email.com',
+        ]);
+    }
+
+
 
     /** @test */
     public function the_email_must_be_valid_to_update_the_user()
@@ -437,6 +465,8 @@ class UsersModuleTest extends TestCase
             'email' => 'email@email.com',
         ]);
     }
+
+
 
     /** @test */
     public function the_password_is_optional_to_update_the_user()
