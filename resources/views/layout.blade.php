@@ -41,6 +41,9 @@
     </style>
     <!-- Custom styles for this template -->
     <link href=" {{ asset('css/style.css') }} " rel="stylesheet">
+
+    <!-- Fontawesome -->
+    <link href=" {{ asset('css/fontawesome.min.css') }} " rel="stylesheet">
   </head>
   <body class="d-flex flex-column h-100">
     <header>
