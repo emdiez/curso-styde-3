@@ -16,7 +16,7 @@ Route::get('/usuarios/{user}/edit', 'UserController@edit')
 Route::put('/usuarios/{user}', 'UserController@update')
     ->where(['user' => '\d+'])
     ->name('users.update');
-
+Route::delete('/usuarios/{user}', 'UserController@destroy')->name('users.destroy');
 
 Route::get('/usuario/{name}/{nickname}', 'WelcomeUserController@withNickname');
 Route::get('/usuario/{name}', 'WelcomeUserController@withoutNickname');

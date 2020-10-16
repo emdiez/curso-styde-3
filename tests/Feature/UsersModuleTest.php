@@ -553,4 +553,22 @@ class UsersModuleTest extends TestCase
             'email' => 'email@email.com',
         ]);
     }
+
+    /** @test */
+    function it_deletes_a_user()
+    {
+        $profession = factory(Profession::class)->create();
+        $user = factory(User::class)->create([
+            'profession_id' => $profession->id
+        ]);
+
+        $this->delete("/usuarios/{$user->id}")
+            ->assertRedirect(route('users'));
+
+        $this->assertDatabaseMissing('users', [
+            'id' => $user->id
+        ]);
+
+        $this->assertSame(0, User::count());
+    }
 }

@@ -115,4 +115,11 @@ class UserController extends Controller
             ->with('title', "Listado de usuarios")
             ->with('user', $user);
     }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+
+        return redirect()->route('users');
+    }
 }
