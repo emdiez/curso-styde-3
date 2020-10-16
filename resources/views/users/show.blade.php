@@ -7,6 +7,7 @@
 
     <p>Nombre: {{ $user->name }}</p>
     <p>Correo: {{ $user->email }}</p>
+    <p>Profession: {{ $user->profession_id . ' - ' . $user->profession->title }}</p>
     {{-- <a href="{{ url()->previous() }}">Regresar a listado de usuarios</a> --}}
     {{-- <a href="{{ url()->current() }}">{{ url()->current() }} - Current</a> --}}
     {{-- <a href="{{ url()->full() }}">{{ url()->full() }} - Full</a> --}}

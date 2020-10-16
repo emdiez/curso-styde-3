@@ -6,6 +6,7 @@ use App\Profession;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -97,10 +98,15 @@ class UserController extends Controller
         $data = request()->validate([
             'name' => ['required'],
             'email' => ['required', 'email'],
-            'password' => ['required', 'min:6'],
+            'password' => ['nullable', 'min:6'],
             'profession_id' => 'required', 'exists:professions,id',
         ]);
-        $data['password'] = bcrypt($data['password']);
+
+        if ($data['password'] != null) {
+            $data['password'] = bcrypt($data['password']);
+        } else {
+            unset($data['password']);
+        }
 
         $user->update($data);
 

@@ -36,7 +36,7 @@
         @else
             <select name="profession_id">
                 @foreach ($professions as $profession)
-                        <option value="{{ $profession->id }}">{{ $profession->id . ' - ' . $profession->title}}</option>
+                        <option value="{{ $profession->id }}" @if ($profession->id == $user->profession_id) {{ 'selected' }}@endif>{{ $profession->id . ' - ' . $profession->title}}</option>
                 @endforeach
             </select>
 

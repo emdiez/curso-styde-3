@@ -439,10 +439,13 @@ class UsersModuleTest extends TestCase
     }
 
     /** @test */
-    public function the_password_is_required_to_update_the_user()
+    public function the_password_is_optional_to_update_the_user()
     {
         $profession = factory(Profession::class)->create();
-        $user = factory(User::class)->create(['email' => 'email@email.com']);
+        $user = factory(User::class)->create([
+            'email' => 'email@email.com',
+            'password' => bcrypt('CLAVE_ANTERIOR')
+        ]);
 
         $this->from("/usuarios/{$user->id}/edit")
             ->put("/usuarios/{$user->id}", [
@@ -451,11 +454,11 @@ class UsersModuleTest extends TestCase
                 'password' => '',
                 'profession_id' => $profession->id,
             ])
-            ->assertRedirect(route('users.edit', ['user' => $user]))
-            ->assertSessionHasErrors(['password']);
+            ->assertRedirect(route('users.show', ['user' => $user]));
 
-        $this->assertDatabaseHas('users', [
-            'email' => 'email@email.com',
+        $this->assertCredentials([
+            'email' => 'emailmodificado@email.com',
+            'password' => 'CLAVE_ANTERIOR'
         ]);
     }
 
